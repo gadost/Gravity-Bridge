@@ -1,6 +1,7 @@
 use crate::utils::*;
 use crate::OPERATION_TIMEOUT;
-use crate::{ADDRESS_PREFIX, COSMOS_NODE_GRPC, IBC_ADDRESS_PREFIX, IBC_NODE_GRPC, STAKING_TOKEN};
+use crate::{ADDRESS_PREFIX, COSMOS_NODE_GRPC, IBC_ADDRESS_PREFIX, IBC_NODE_GRPC, get_fee, STAKING_TOKEN};
+use crate::airdrop_proposal::wait_for_proposals_to_execute;
 use anyhow::{Context, Result};
 use cosmos_gravity::send::TIMEOUT;
 use deep_space::error::CosmosGrpcError;
@@ -10,6 +11,7 @@ use deep_space::{Contact, Msg};
 use gravity_proto::cosmos_sdk_proto::cosmos::bank::v1beta1::query_client::QueryClient as CosmosQueryClient;
 use gravity_proto::cosmos_sdk_proto::cosmos::bank::v1beta1::{MsgSend, QueryAllBalancesRequest};
 use gravity_proto::cosmos_sdk_proto::cosmos::base::v1beta1::Coin;
+use gravity_proto::cosmos_sdk_proto::cosmos::params::v1beta1::ParamChange;
 use gravity_proto::cosmos_sdk_proto::cosmos::staking::v1beta1::{
     query_client::QueryClient as StakingQueryClient, MsgDelegate, QueryValidatorDelegationsRequest,
 };
