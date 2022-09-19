@@ -621,7 +621,7 @@ pub async fn add_ica_host_allow_messages(contact: &Contact, keys: &[ValidatorKey
     let change = ParamChange {
         subspace: "icahost".to_string(),
         key: "AllowMessages".to_string(),
-        value: r#""*""#.to_string(),
+        value: r#"["*"]"#.to_string(),
     };
     params_to_change.push(change);
     create_parameter_change_proposal(
