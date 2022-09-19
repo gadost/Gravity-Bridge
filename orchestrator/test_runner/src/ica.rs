@@ -619,7 +619,7 @@ pub async fn add_ica_host_allow_messages(contact: &Contact, keys: &[ValidatorKey
     info!("Submitting and passing a proposal to allow all messages for interchainaccounts");
     let mut params_to_change = Vec::new();
     let change = ParamChange {
-        subspace: "hostGenesisState".to_string(),
+        subspace: "icahost".to_string(),
         key: "AllowMessages".to_string(),
         value: r#""*""#.to_string(),
     };
