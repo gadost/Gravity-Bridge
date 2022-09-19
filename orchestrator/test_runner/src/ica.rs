@@ -82,6 +82,8 @@ pub async fn ica_test(
     keys: Vec<ValidatorKeys>,
     ibc_keys: Vec<CosmosPrivateKey>,
 ) {
+    // Add allow messages
+    add_ica_host_allow_messages(contact,&keys).await;
     // Create connection query clients for both chains
     let gravity_connection_qc = ConnectionQueryClient::connect(COSMOS_NODE_GRPC.as_str())
         .await
@@ -607,4 +609,26 @@ pub async fn check_delegatinons(
     Err(CosmosGrpcError::BadResponse(
         "Delegator not found:(".to_string(),
     ))
+}
+
+
+/// submits and passes a proposal to add interchainaccounts host allow messages
+pub async fn add_ica_host_allow_messages(contact: &Contact, keys: &[ValidatorKeys]) {
+    info!("Submitting and passing a proposal to allow all messages for interchainaccounts");
+    let mut params_to_change = Vec::new();
+    let change = ParamChange {
+        subspace: "interchainaccounts".to_string(),
+        key: "AllowMessages".to_string(),
+        value: r#""*""#.to_string(),
+    };
+    params_to_change.push(change);
+    create_parameter_change_proposal(
+        contact,
+        keys[0].validator_key,
+        params_to_change,
+        get_fee(None),
+    )
+    .await;
+    vote_yes_on_proposals(contact, keys, None).await;
+    wait_for_proposals_to_execute(contact).await;
 }
